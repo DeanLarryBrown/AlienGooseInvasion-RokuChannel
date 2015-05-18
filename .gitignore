@@ -1,3 +1,4 @@
 *.xcf
 resources/
 Gimp/
+distribution/
