@@ -1,0 +1,4 @@
+*.xcf
+resources/
+Gimp/
+distribution/
