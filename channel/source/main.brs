@@ -8,6 +8,7 @@ End Sub
 Sub Setup() As Object
     this = {
 		host:	   "76.25.132.254:1337"
+		adurl:	   "http://76.25.132.254:1337/nextad.png"
         port:      CreateObject("roMessagePort")
         progress:  0 'buffering progress
         position:  0 'playback position (in seconds)
@@ -18,6 +19,7 @@ Sub Setup() As Object
         setup:     SetupFramedCanvas
         paint:     PaintFramedCanvas
         eventloop: EventLoop
+		fetch:	   stringFetch
     }
 
     'Static help text:
@@ -65,14 +67,17 @@ Sub Setup() As Object
     this.player.SetLoop(true)
     this.player.SetPositionNotificationPeriod(1)
     this.player.SetDestinationRect(this.layout.right)
-	print "http://" this.host "/videos/xplosion.mp4"
     this.player.SetContentList([{
 		streamFormat: "mp4"
-        Stream: { url: "http://76.25.132.254:1337/videos/xplosion.mp4" }
+        Stream: { url: "http://76.25.132.254:1337/videos/gooseAttack.mp4" }
     }])
     this.player.Play()
 
     return this
+End Sub
+
+Sub stringFetch()
+	
 End Sub
 
 Sub EventLoop()
@@ -134,8 +139,8 @@ Sub EventLoop()
             end if
             'Output events for debug
 			if msg.GetType()=6 
-				if msg.GetIndex()>59
-					m.position = m.position - 60
+				if msg.GetIndex()>50
+					m.position = m.position mod 50
 					m.player.Seek(m.position * 1000)
 					if m.setup = SetupFramedCanvas
 						m.setup()
@@ -198,7 +203,7 @@ Sub SetupFramedCanvas()
             TextAttrs: { halign: "left", valign: "top", color: m.textcolor }
         },
 		{ 'ad:
-            Url: "http://76.25.132.254:1337/nextad.png"
+            Url: m.adurl
 			TargetRect: m.layout.ad
             CompositionMode: "Source"
         }
